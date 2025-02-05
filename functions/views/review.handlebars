@@ -25,6 +25,7 @@
         <div class="pinyin"></div>
         <div class="definitions"></div>
       </div>
+    
     </div>
   </div>
 
@@ -43,6 +44,48 @@
 
 <script type="module">
 import { SRSManager } from '/js/srs.js';
+
+// Pinyin tone conversion function
+function convertPinyinTones(pinyin) {
+  const vowels = {
+    a: ['ā', 'á', 'ǎ', 'à', 'a'],
+    e: ['ē', 'é', 'ě', 'è', 'e'],
+    i: ['ī', 'í', 'ǐ', 'ì', 'i'],
+    o: ['ō', 'ó', 'ǒ', 'ò', 'o'],
+    u: ['ū', 'ú', 'ǔ', 'ù', 'u'],
+    ü: ['ǖ', 'ǘ', 'ǚ', 'ǜ', 'ü'],
+    v: ['ǖ', 'ǘ', 'ǚ', 'ǜ', 'ü'] // Handle v as ü
+  };
+
+  return pinyin.map(syllable => {
+    // Remove tone number and find it
+    const matches = syllable.match(/([a-zü]+)([1-5])/i);
+    if (!matches) return syllable;
+
+    const [_, word, tone] = matches;
+    const toneNum = parseInt(tone) - 1;
+
+    // Find the first vowel that needs to be modified
+    const vowelOrder = ['a', 'o', 'e', 'i', 'u', 'ü', 'v'];
+    let index = -1;
+    let vowelFound = '';
+
+    for (const vowel of vowelOrder) {
+      index = word.toLowerCase().indexOf(vowel);
+      if (index !== -1) {
+        vowelFound = vowel;
+        break;
+      }
+    }
+
+    if (index === -1) return syllable;
+
+    // Replace the vowel with its toned version
+    return word.substring(0, index) +
+           vowels[vowelFound][toneNum] +
+           word.substring(index + 1);
+  });
+}
 
 const srs = new SRSManager();
 let currentCard = null;
@@ -143,8 +186,9 @@ function showNextCard() {
 
   // Update back
   back.querySelector('.characters').textContent = currentCard.word;
-  back.querySelector('.pinyin').textContent = currentCard.pinyin.join(' ');
-  back.querySelector('.definitions').textContent = currentCard.definition;
+  const pinyinWithTones = convertPinyinTones(currentCard.pinyin).join(' ');
+  back.querySelector('.pinyin').textContent = pinyinWithTones;
+  back.querySelector('.definitions').textContent = currentCard.definition.split('|').join('\n');
 
   cardContainer.style.display = 'block';
   buttons.style.display = 'none';

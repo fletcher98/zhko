@@ -1,4 +1,4 @@
-i<div class="deck-page">
+<div class="deck-page">
   <h1>Your Review Deck</h1>
   
   <div class="review-stats">
@@ -12,17 +12,17 @@ i<div class="deck-page">
     <p>Your deck is empty. Browse words and click "Add to Deck" to start building your collection.</p>
   </div>
 
-  <ul id="deck-list" class="deck-list">
+  <ul id="deck-list" class="word-list">
     <template id="deck-word-template">
-      <li class="deck-word">
-        <div class="deck-word-info">
+      <li>
+        <div class="word">
           <a class="characters"></a>
           <div class="definitions"></div>
-        </div>
-        <div class="deck-word-stats">
-          <div class="next-review"></div>
-          <div class="review-count"></div>
-          <button class="remove-from-deck">Remove from deck</button>
+          <div class="percentile-outer">
+            <div class="next-review"></div>
+            <div class="review-count"></div>
+            <button class="remove-from-deck">Remove</button>
+          </div>
         </div>
       </li>
     </template>
@@ -45,33 +45,34 @@ if (cards.length === 0) {
 } else {
   const deckList = document.querySelector('#deck-list');
   const template = document.querySelector('#deck-word-template');
+  
+  // Clear existing cards before adding new ones
+  deckList.innerHTML = '';
 
   cards.forEach(card => {
-    const node = template.content.cloneNode(true);
+    const fragment = template.content.cloneNode(true);
+    const li = fragment.querySelector('li');
     const stats = srs.getCardStats(card.word);
     
     // Create ruby element for pinyin
     const rubyEl = document.createElement('ruby');
     card.word.split('').forEach((character, i) => {
-      const charEl = document.createElement('span');
-      charEl.textContent = character;
-      rubyEl.appendChild(charEl);
-
+      rubyEl.appendChild(document.createTextNode(character));
       const rtEl = document.createElement('rt');
       rtEl.textContent = card.pinyin[i];
       rubyEl.appendChild(rtEl);
     });
 
-    node.querySelector('.characters').appendChild(rubyEl);
-    node.querySelector('.characters').href = `/word/${card.word}`;
-    node.querySelector('.definitions').textContent = card.definition;
-    node.querySelector('.next-review').textContent = stats.isDue ? 'Due now' : `Due in ${stats.dueIn} days`;
-    node.querySelector('.review-count').textContent = `Reviews: ${stats.repetitions}`;
+    fragment.querySelector('.characters').appendChild(rubyEl);
+    fragment.querySelector('.characters').href = `/word/${card.word}`;
+    fragment.querySelector('.definitions').textContent = card.definition;
+    fragment.querySelector('.next-review').textContent = stats.isDue ? 'Due now' : `Due in ${stats.dueIn} days`;
+    fragment.querySelector('.review-count').textContent = `Reviews: ${stats.repetitions}`;
 
     // Add remove button handler
-    node.querySelector('.remove-from-deck').addEventListener('click', () => {
+    fragment.querySelector('.remove-from-deck').addEventListener('click', () => {
       srs.removeFromDeck(card.word);
-      deckList.removeChild(node.parentElement);
+      deckList.removeChild(li);
       // Update stats
       const updatedCards = srs.getAllCards();
       const updatedDueCards = srs.getDueCards();
@@ -82,7 +83,7 @@ if (cards.length === 0) {
       }
     });
 
-    deckList.appendChild(node);
+    deckList.appendChild(li);
   });
 }
 </script>
