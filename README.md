@@ -1,8 +1,8 @@
-# chinesedict
+# zhko
 
 ## Overview
 
-ChineseDict aims to be a fast Chinese-English dictionary. Its main goal is providing instant-search to enable looking up words rapidly during discussion or watching a video.
+zhko is an enhanced fork of Jeff Carp's ChineseDict that combines a fast Chinese-English dictionary with a spaced repetition system.
 
 ## Development
 
@@ -14,6 +14,7 @@ make serve
 
 ## Acknowledgements
 
+- Chinese dictionary app from: https://github.com/jeffcarp/chinesedict
 - Dictionary data from the [CC-CEDICT](https://cc-cedict.org/) project.
 - Style inspiration from [jisho.org](https://jisho.org).
 - Chengyu from: https://github.com/chujiezheng/ChID-Dataset/

@@ -341,14 +341,14 @@ ul.word-list > li {
 }
 .segment {
   display: inline-block;
-  background-color: #eee;
+  background-color: #373737; 
   padding: 8px;
   border-radius: 4px;
   margin: 0 0 8px 0;
 }
 .segment:hover {
   cursor: pointer;
-  background-color: #ddd;
+  background-color: #535353;  
 }
 
 .inline-example {
@@ -368,10 +368,10 @@ ul.word-list > li {
 }
 
 footer {
-  margin-top: 4em;
-  padding-top: 4em;
+  margin-top: 2em;  /* Changed from 4em to 2em */
+  padding-top: 2em; /* Changed from 4em to 2em */
   line-height: 1.25rem;
-  border-top: solid 1px #ddd;
+  border-top: solid 1px #bbb;  /* Changed from #ddd to #bbb for darker line */
   font-size: 0.75rem;
   color: #888;
 }
@@ -558,6 +558,10 @@ footer {
   .word .next-review,
   .word .review-count {
     color: #aaa;
+  }
+
+  footer {
+    border-top: solid 1px #444;  /* Darker line for dark mode */
   }
 }
 
