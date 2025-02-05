@@ -60,7 +60,7 @@ if (cards.length === 0) {
     card.word.split('').forEach((character, i) => {
       rubyEl.appendChild(document.createTextNode(character));
       const rtEl = document.createElement('rt');
-      rtEl.textContent = card.pinyin[i];
+      rtEl.textContent = numericToMarkedPinyin(card.pinyin[i]);
       rubyEl.appendChild(rtEl);
     });
 
