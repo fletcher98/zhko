@@ -71,7 +71,7 @@ if (cards.length === 0) {
 
     // Add remove button handler
     fragment.querySelector('.remove-from-deck').addEventListener('click', () => {
-      srs.removeFromDeck(card.word);
+      srs.removeCard(card.word);
       deckList.removeChild(li);
       // Update stats
       const updatedCards = srs.getAllCards();
