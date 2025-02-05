@@ -25,7 +25,7 @@ async function initializeSRS() {
     console.log('Button data:', { word, pinyin, definition });
 
     if (srs.isInDeck(word)) {
-      addToDeckBtn.textContent = 'Added to Deck';
+      addToDeckBtn.textContent = 'Added';
       addToDeckBtn.classList.add('added');
       const stats = srs.getCardStats(word);
       status.textContent = stats.isDue ? 'Due for review' : `Next review in ${stats.dueIn} days`;
@@ -36,7 +36,7 @@ async function initializeSRS() {
       if (!srs.isInDeck(word)) {
         if (srs.addCard(word, pinyin, definition)) {
           console.log('Card added successfully');
-          addToDeckBtn.textContent = 'Added to Deck';
+          addToDeckBtn.textContent = 'Added';
           addToDeckBtn.classList.add('added');
           status.textContent = 'Added to review deck';
         }
@@ -347,7 +347,7 @@ function search() {
     const wordDiv = node.querySelector(".word");
     const addButton = document.createElement("button");
     addButton.className = "add-to-deck";
-    addButton.textContent = srs.isInDeck(result.simplified) ? "Added" : "Add to Deck";
+    addButton.textContent = srs.isInDeck(result.simplified) ? "Added" : "Add";
     if (srs.isInDeck(result.simplified)) {
       addButton.classList.add("added");
     }

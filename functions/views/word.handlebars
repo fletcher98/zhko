@@ -97,7 +97,7 @@
       <p>No examples. <a href="https://github.com/jeffcarp/chinesedict/issues/new">Add one?</a></p>
     {{/each}}
   </section>
-
+{{!--
   <section>
     <h2>Comments</h2>
     <script src="https://giscus.app/client.js"
@@ -117,14 +117,22 @@
             async>
     </script>
   </section>
-
+--}}
 </div>
 
 <script type="module">
 console.log('Word page loaded');
-// Ensure SRS module is loaded and initialized for this page
+// Import necessary modules
 import { SRSManager } from '/js/srs.js';
+import { numericToMarkedPinyin } from '/js/pinyin.js';
+
 const srs = new SRSManager();
+
+// Convert numeric pinyin to diacritic form for each character
+document.querySelectorAll('.char-pinyin').forEach(el => {
+  const numericPinyin = el.textContent.trim();
+  el.textContent = numericToMarkedPinyin(numericPinyin);
+});
 
 // Initialize Add to Deck button
 const addToDeckBtn = document.getElementById('add-to-deck-btn');

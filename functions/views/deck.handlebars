@@ -9,7 +9,7 @@
   </div>
 
   <div id="empty-deck">
-    <p>Your deck is empty. Browse words and click "Add to Deck" to start building your collection.</p>
+    <p>Your deck is empty. Browse words and click "Add" to start building your collection.</p>
   </div>
 
   <ul id="deck-list" class="word-list">
@@ -31,6 +31,7 @@
 
 <script type="module">
 import { SRSManager } from '/js/srs.js';
+import { numericToMarkedPinyin } from '/js/pinyin.js';
 
 // Initialize SRS and render deck
 const srs = new SRSManager();
