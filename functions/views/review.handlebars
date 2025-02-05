@@ -29,7 +29,7 @@
     </div>
   </div>
 
-  <div id="review-buttons">
+  <div id="review-buttons" style="display: none;">
     <button class="again" data-interval="0" title="Press 1">Again <span class="shortcut">1</span></button>
     <button class="hard" data-interval="1" title="Press 2">Hard <span class="shortcut">2</span></button>
     <button class="good" data-interval="2" title="Press 3 or Space">Good <span class="shortcut">3</span></button>
@@ -145,8 +145,11 @@ function showNextCard() {
 
   // Update back
   back.querySelector('.characters').textContent = currentCard.word;
+  
+  // Convert pinyin array to diacritic form
   const pinyinWithTones = currentCard.pinyin.map(syllable => numericToMarkedPinyin(syllable)).join(' ');
   back.querySelector('.pinyin').textContent = pinyinWithTones;
+  
   back.querySelector('.definitions').textContent = currentCard.definition.split('|').join('\n');
 
   cardContainer.style.display = 'block';

@@ -1,5 +1,6 @@
 import { Dictionary } from "/js/dictionary.js";
 import { SRSManager } from "/js/srs.js";
+import { numericToMarkedPinyin } from "/js/pinyin.js";
 
 const QUERY_LIMIT = 25;
 let legacyDictionary = [];
@@ -170,7 +171,8 @@ function initializeReviewPage() {
 
     // Update back
     const back = cardContainer.querySelector(".card-back");
-    back.querySelector(".pinyin").textContent = currentCard.pinyin.join(" ");
+    const pinyinWithDiacritics = currentCard.pinyin.map(p => numericToMarkedPinyin(p));
+    back.querySelector(".pinyin").textContent = pinyinWithDiacritics.join(" ");
     back.querySelector(".definitions").textContent = currentCard.definition;
 
     // Show card and buttons

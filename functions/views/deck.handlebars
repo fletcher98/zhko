@@ -70,8 +70,10 @@ if (cards.length === 0) {
     fragment.querySelector('.next-review').textContent = stats.isDue ? 'Due now' : `Due in ${stats.dueIn} days`;
     fragment.querySelector('.review-count').textContent = `Reviews: ${stats.repetitions}`;
 
-    // Add remove button handler
-    fragment.querySelector('.remove-from-deck').addEventListener('click', () => {
+    deckList.appendChild(li);
+    
+    // Add remove button handler after appending li
+    li.querySelector('.remove-from-deck').addEventListener('click', () => {
       srs.removeCard(card.word);
       deckList.removeChild(li);
       // Update stats
@@ -83,8 +85,6 @@ if (cards.length === 0) {
         document.querySelector('#empty-deck').style.display = 'block';
       }
     });
-
-    deckList.appendChild(li);
   });
 }
 </script>

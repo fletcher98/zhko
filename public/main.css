@@ -468,6 +468,7 @@ footer {
   font-size: 24px;
   margin-bottom: 24px;
   color: #666;
+  font-family: Arial; /* Ensure proper font for pinyin display */
 }
 
 .card-back .definitions {
@@ -542,7 +543,7 @@ footer {
   }
   
   .card-back .pinyin {
-    color: #999;
+    color: #ccc; /* Lighter color for better contrast in dark mode */
   }
   
   .card-back .definitions {
