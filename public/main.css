@@ -68,8 +68,60 @@ input[name=q] {
   padding: 0.75rem 0.5rem;;
 }
 
-.characters {
-  font-family: "Source Han Sans", "源ノ角ゴシック", "Hiragino Sans", "HiraKakuProN-W3", "Hiragino Kaku Gothic ProN W3", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "Noto Sans", "Noto Sans CJK JP", "メイリオ", Meiryo, "游ゴシック", YuGothic, "ＭＳ Ｐゴシック", "MS PGothic", "ＭＳ ゴシック", "MS Gothic", sans-serif;
+/* Chinese font consistency */
+.characters,
+.word-char,
+.word-char-alt,
+.char-entries {
+  font-family: 'Noto Sans SC', sans-serif;
+}
+
+/* Add/Remove deck button styling */
+.study-tools {
+  margin: 16px 0;
+}
+
+.add-to-deck {
+  display: inline-block;
+  height: 36px;
+  padding: 0 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: white;
+  transition: background-color 0.2s ease;
+  vertical-align: middle;
+  line-height: 36px;
+}
+
+.add-to-deck:hover {
+  opacity: 0.9;
+}
+
+/* Yellow state when just added */
+.add-to-deck.added {
+  background-color: #ffc107;
+}
+
+/* Red state for remove button */
+.add-to-deck.in-deck {
+  background-color: #f44336;
+}
+
+.deck-status {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 14px;
+  color: #666;
+  vertical-align: middle;
+}
+
+@media (prefers-color-scheme: dark) {
+  .deck-status {
+    color: #999;
+  }
 }
 
 .post {
@@ -422,6 +474,7 @@ footer {
   font-size: 20px;
   line-height: 1.5;
   color: #333;
+  white-space: pre-line;
 }
 
 .flip-prompt {

@@ -29,7 +29,7 @@
           data-word="{{entry.simplified}}"
           data-pinyin="{{entry.pinyinString}}"
           data-definition="{{entry.definitionString}}">
-          Add to Deck
+          Add
         </button>
         <span id="deck-status" class="deck-status"></span>
       </div>
@@ -136,24 +136,71 @@ if (addToDeckBtn) {
 
   console.log('Button data:', { word, pinyin, definition });
 
-  if (srs.isInDeck(word)) {
-    addToDeckBtn.textContent = 'Added to Deck';
-    addToDeckBtn.classList.add('added');
-    const stats = srs.getCardStats(word);
-    if (stats) {
-      status.textContent = stats.isDue ? 'Due for review' : `Next review in ${stats.dueIn} days`;
+  let addedTimeout;
+
+  function updateButtonState(isTemporaryAdded = false) {
+    if (srs.isInDeck(word)) {
+      // Clear any existing timeout
+      if (addedTimeout) {
+        clearTimeout(addedTimeout);
+        addedTimeout = null;
+      }
+
+      if (isTemporaryAdded) {
+        // Temporary "Added" state (yellow)
+        addToDeckBtn.textContent = 'Added';
+        addToDeckBtn.classList.add('added');
+        addToDeckBtn.classList.remove('in-deck');
+
+        // Switch to "Remove from Deck" after 1 second
+        addedTimeout = setTimeout(() => {
+          if (srs.isInDeck(word)) { // Double check it's still in deck
+            addToDeckBtn.textContent = 'Remove';
+            addToDeckBtn.classList.remove('added');
+            addToDeckBtn.classList.add('in-deck');
+          }
+        }, 1000); 
+      } else {
+        // Normal "in deck" state (red)
+        addToDeckBtn.textContent = 'Remove';
+        addToDeckBtn.classList.remove('added');
+        addToDeckBtn.classList.add('in-deck');
+      }
+
+      const stats = srs.getCardStats(word);
+      if (stats) {
+        status.textContent = stats.isDue ? 'Due for review' : `Next review in ${stats.dueIn} days`;
+      }
+    } else {
+      // Not in deck state (green)
+      addToDeckBtn.textContent = 'Add';
+      addToDeckBtn.classList.remove('added', 'in-deck');
+      status.textContent = '';
     }
   }
 
+  // Set initial state
+  updateButtonState();
+
   addToDeckBtn.addEventListener('click', () => {
-    console.log('Add to Deck button clicked');
-    if (!srs.isInDeck(word)) {
+    console.log('Deck button clicked');
+    if (srs.isInDeck(word)) {
+      if (srs.removeCard(word)) {
+        console.log('Card removed successfully');
+        updateButtonState();
+      }
+    } else {
       if (srs.addCard(word, pinyin, definition)) {
         console.log('Card added successfully');
-        addToDeckBtn.textContent = 'Added to Deck';
-        addToDeckBtn.classList.add('added');
-        status.textContent = 'Added to review deck';
+        updateButtonState(true); // Show temporary "Added" state
       }
+    }
+  });
+
+  // Clean up timeout on page unload
+  window.addEventListener('unload', () => {
+    if (addedTimeout) {
+      clearTimeout(addedTimeout);
     }
   });
 }
