@@ -1,0 +1,185 @@
+<div class="review-container">
+  <div class="review-stats">
+    <div class="stat-box">
+      <div id="new-count" class="stat-number">0</div>
+      <div class="stat-label">New</div>
+    </div>
+    <div class="stat-box">
+      <div id="due-count" class="stat-number">0</div>
+      <div class="stat-label">Due</div>
+    </div>
+    <div class="stat-box">
+      <div id="done-count" class="stat-number">0</div>
+      <div class="stat-label">Done</div>
+    </div>
+  </div>
+
+  <div id="card-container" class="card-container">
+    <div class="card">
+      <div class="card-front">
+        <div class="characters"></div>
+        <div class="flip-prompt">Flip</div>
+      </div>
+      <div class="card-back" style="display: none;">
+        <div class="characters"></div>
+        <div class="pinyin"></div>
+        <div class="definitions"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="review-buttons">
+    <button class="again" data-interval="0" title="Press 1">Again <span class="shortcut">1</span></button>
+    <button class="hard" data-interval="1" title="Press 2">Hard <span class="shortcut">2</span></button>
+    <button class="good" data-interval="2" title="Press 3 or Space">Good <span class="shortcut">3</span></button>
+    <button class="easy" data-interval="3" title="Press 4">Easy <span class="shortcut">4</span></button>
+  </div>
+
+  <div id="no-reviews">
+    <p>No cards due for review!</p>
+    <p>Browse words and click "Add to Deck" to add more cards.</p>
+  </div>
+</div>
+
+<script type="module">
+import { SRSManager } from '/js/srs.js';
+
+const srs = new SRSManager();
+let currentCard = null;
+let isCardFlipped = false;
+
+// Keyboard controls
+document.addEventListener('keydown', (e) => {
+  if (!currentCard) return;
+  
+  if (e.key === ' ' && !e.repeat) {
+    e.preventDefault();
+    if (!isCardFlipped) {
+      // If card is not flipped, flip it
+      flipCard();
+    } else {
+      // If card is flipped, treat spacebar as "Good" (3)
+      handleReview(2);
+    }
+    return;
+  }
+
+  // Only handle number keys if card is flipped
+  if (!isCardFlipped) return;
+
+  switch (e.key) {
+    case '1':
+      handleReview(0);
+      break;
+    case '2':
+      handleReview(1);
+      break;
+    case '3':
+      handleReview(2);
+      break;
+    case '4':
+      handleReview(3);
+      break;
+  }
+});
+
+function handleReview(quality) {
+  if (!currentCard || !isCardFlipped) return;
+  srs.reviewCard(currentCard.word, quality);
+  isCardFlipped = false;
+  showNextCard();
+}
+
+function flipCard() {
+  if (!currentCard) return;
+  const front = document.querySelector('.card-front');
+  const back = document.querySelector('.card-back');
+  front.style.display = 'none';
+  back.style.display = 'block';
+  document.getElementById('review-buttons').style.display = 'flex';
+  isCardFlipped = true;
+}
+
+function updateCounts() {
+  const cards = srs.getAllCards();
+  const dueCards = srs.getDueCards();
+  const newCards = cards.filter(c => c.repetitions === 0);
+
+  document.getElementById('new-count').textContent = newCards.length;
+  document.getElementById('due-count').textContent = dueCards.length;
+
+  // Count cards reviewed today
+  const today = new Date().toDateString();
+  const doneCards = cards.filter(c => 
+    c.lastReview && new Date(c.lastReview).toDateString() === today
+  );
+  document.getElementById('done-count').textContent = doneCards.length;
+}
+
+function showNextCard() {
+  const dueCards = srs.getDueCards();
+  const cardContainer = document.getElementById('card-container');
+  const buttons = document.getElementById('review-buttons');
+  const noReviews = document.getElementById('no-reviews');
+
+  if (dueCards.length === 0) {
+    cardContainer.style.display = 'none';
+    buttons.style.display = 'none';
+    noReviews.style.display = 'block';
+    updateCounts();
+    return;
+  }
+
+  currentCard = dueCards[0];
+  
+  // Hide back, show front
+  const front = cardContainer.querySelector('.card-front');
+  const back = cardContainer.querySelector('.card-back');
+  front.style.display = 'block';
+  back.style.display = 'none';
+  
+  // Update front
+  front.querySelector('.characters').textContent = currentCard.word;
+
+  // Update back
+  back.querySelector('.characters').textContent = currentCard.word;
+  back.querySelector('.pinyin').textContent = currentCard.pinyin.join(' ');
+  back.querySelector('.definitions').textContent = currentCard.definition;
+
+  cardContainer.style.display = 'block';
+  buttons.style.display = 'none';
+  noReviews.style.display = 'none';
+  updateCounts();
+}
+
+// Card reveal handling
+document.getElementById('card-container').addEventListener('click', () => {
+  flipCard();
+});
+
+// Review button handling
+document.getElementById('review-buttons').querySelectorAll('button').forEach(button => {
+  button.addEventListener('click', () => {
+    const quality = parseInt(button.dataset.interval);
+    handleReview(quality);
+  });
+});
+
+// Add CSS for keyboard shortcuts
+const style = document.createElement('style');
+style.textContent = `
+  #review-buttons .shortcut {
+    display: inline-block;
+    min-width: 20px;
+    padding: 2px 4px;
+    margin-left: 6px;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+`;
+document.head.appendChild(style);
+
+// Start reviews
+showNextCard();
+</script>

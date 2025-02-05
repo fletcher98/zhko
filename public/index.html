@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+  <title>ChineseDict</title>
+
+  <meta charset="utf-8">
+
+  <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+
+  <link rel="icon" type="image/png" href="/zhong.png" />
+  <link rel="apple-touch-icon" href="/zhong-bg.png" />
+
+  <link
+    rel="search"
+    type="application/opensearchdescription+xml"
+    title="Search ChineseDict"
+    href="/opensearch.xml" />
+
+  <link rel="stylesheet" href="/main.css">
+
+  <!-- TODO
+  <link rel="canonical" href="">
+  -->
+</head>
+<body>
+  <div class="content" id="app">
+    <header>
+      <nav>
+        <h1><a href="/">ChineseDict</a></h1>
+        <span><a href="/random">Random</a></span>
+        <span><a href="/deck">Deck</a></span>
+        <span><a href="/review">Review</a></span>
+        <span><a href="/about">About</a></span>
+      </nav>
+
+      <form action="/" method="GET">
+        <input
+          type="text"
+          name="q"
+          id="query"
+          placeholder="Search for a word..."
+          autofocus />
+        </form>
+
+        <div id="segments">
+        </div>
+    </header>
+
+    <ul id="results" class="word-list">
+      <li style="border-bottom: none; font-size: 1.2rem;">
+        <p><b>ChineseDict</b> aspires to be a Chinese-English dictionary for quick reference.</p>
+
+        <p>To get started, enter any Chinese text or English word in the search box.</p>
+
+        <h4>Dictionary</h4>
+
+        <p>
+        Words: <a href="/word/小狗">小狗</a>, <a href="/word/樱花">樱花</a> <br />
+          English words: <a href="/?q=news">news</a>
+        </p>
+
+        <h4>Segmentation</h4>
+
+        <p>Multiple Chinese words to segment in real-time: <a href="/?q=我们正在吃饭">我们正在吃饭</a></p>
+
+        <h4>Lists</h4>
+
+        <p>
+          <a href="/tag/HSK1">HSK1</a>,
+          <a href="/tag/HSK2">HSK2</a>,
+          <a href="/tag/HSK3">HSK3</a>,
+          <a href="/tag/HSK4">HSK4</a>,
+          <a href="/tag/HSK5">HSK5</a>,
+          <a href="/tag/HSK6">HSK6</a>,
+          <a href="/tag/chengyu">chengyu</a>
+        </p>
+
+        <h4>Study Tools</h4>
+        <p>
+          Use the <a href="/deck">Deck</a> feature to save words for review and practice them using <a href="/review">spaced repetition</a>.
+        </p>
+
+      </li>
+    </ul>
+    <script>
+      // TEMPORARY TERRIBLE HACK
+      const queryParams = new URLSearchParams(window.location.search);
+      const query = queryParams.get("q");
+      if (query) {
+        document.querySelector('.word-list').innerText = 'Loading...';
+      }
+    </script>
+
+    <footer>
+      Dictionary data via <a href="/about">CC-EDICT and others</a>.<br/>
+
+      Provide feedback <a href="https://github.com/jeffcarp/chinesedict/issues/new">here</a>.<br/>
+
+      Currently only <a href="https://github.com/jeffcarp/chinesedict/issues/1">simplified characters</a> are supported.
+    </footer>
+  </div>
+</body>
+
+<template id="search-result-li">
+  <li>
+      <div class="word">
+        <a class="characters"></a>
+        <div class="definitions"></div>
+        <div class="percentile-outer"><span class="percentile"></span></div>
+      </div>
+  </li>
+</template>
+
+<template id="word-segment">
+  <span class="segment"></span>
+</template>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VF4JJW0F68"></script>
+<script>
+  if (!window.location.origin.includes('localhost')) {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-JGWNGNWF35');
+  }
+</script>
+
+<script src="/main.js" type="module"></script>
+</html>

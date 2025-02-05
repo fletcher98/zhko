@@ -1,0 +1,88 @@
+i<div class="deck-page">
+  <h1>Your Review Deck</h1>
+  
+  <div class="review-stats">
+    <div class="stat-count">
+      <span id="total-cards">0</span> total cards •
+      <span id="due-today">0</span> due today
+    </div>
+  </div>
+
+  <div id="empty-deck">
+    <p>Your deck is empty. Browse words and click "Add to Deck" to start building your collection.</p>
+  </div>
+
+  <ul id="deck-list" class="deck-list">
+    <template id="deck-word-template">
+      <li class="deck-word">
+        <div class="deck-word-info">
+          <a class="characters"></a>
+          <div class="definitions"></div>
+        </div>
+        <div class="deck-word-stats">
+          <div class="next-review"></div>
+          <div class="review-count"></div>
+          <button class="remove-from-deck">Remove from deck</button>
+        </div>
+      </li>
+    </template>
+  </ul>
+</div>
+
+<script type="module">
+import { SRSManager } from '/js/srs.js';
+
+// Initialize SRS and render deck
+const srs = new SRSManager();
+const cards = srs.getAllCards();
+const dueCards = srs.getDueCards();
+
+document.querySelector('#total-cards').textContent = cards.length;
+document.querySelector('#due-today').textContent = dueCards.length;
+
+if (cards.length === 0) {
+  document.querySelector('#empty-deck').style.display = 'block';
+} else {
+  const deckList = document.querySelector('#deck-list');
+  const template = document.querySelector('#deck-word-template');
+
+  cards.forEach(card => {
+    const node = template.content.cloneNode(true);
+    const stats = srs.getCardStats(card.word);
+    
+    // Create ruby element for pinyin
+    const rubyEl = document.createElement('ruby');
+    card.word.split('').forEach((character, i) => {
+      const charEl = document.createElement('span');
+      charEl.textContent = character;
+      rubyEl.appendChild(charEl);
+
+      const rtEl = document.createElement('rt');
+      rtEl.textContent = card.pinyin[i];
+      rubyEl.appendChild(rtEl);
+    });
+
+    node.querySelector('.characters').appendChild(rubyEl);
+    node.querySelector('.characters').href = `/word/${card.word}`;
+    node.querySelector('.definitions').textContent = card.definition;
+    node.querySelector('.next-review').textContent = stats.isDue ? 'Due now' : `Due in ${stats.dueIn} days`;
+    node.querySelector('.review-count').textContent = `Reviews: ${stats.repetitions}`;
+
+    // Add remove button handler
+    node.querySelector('.remove-from-deck').addEventListener('click', () => {
+      srs.removeFromDeck(card.word);
+      deckList.removeChild(node.parentElement);
+      // Update stats
+      const updatedCards = srs.getAllCards();
+      const updatedDueCards = srs.getDueCards();
+      document.querySelector('#total-cards').textContent = updatedCards.length;
+      document.querySelector('#due-today').textContent = updatedDueCards.length;
+      if (updatedCards.length === 0) {
+        document.querySelector('#empty-deck').style.display = 'block';
+      }
+    });
+
+    deckList.appendChild(node);
+  });
+}
+</script>

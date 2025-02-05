@@ -1,0 +1,502 @@
+:root {
+  --accent-color: #0068ee;
+  --light-color: #cfe2ff;
+}
+
+html, body {
+  font-family: Arial;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  color: #111;
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #222;
+    color: white;
+  }
+  a {
+    color: white;
+  }
+  header h1 a {
+    color: white;
+  }
+}
+@media (prefers-color-scheme: light) {
+  header h1 a {
+    color: #111;
+  }
+}
+.content {
+  margin: 0 auto;
+  max-width: 900px;
+}
+header {
+}
+header h1 {
+  font-size: 1.3rem;
+  margin: 0;
+  padding: 12px 0;
+}
+header h1 a {
+  text-decoration: none;
+}
+header nav {
+padding: 0;
+display: flex;
+flex-direction: row;
+flex-wrap: nowrap;
+justify-content: space-between;
+align-items: center;
+}
+header nav ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+header nav ul li {
+  padding: 1rem;
+}
+header nav span a {
+  color: var(--accent-color);
+  font-size: 0.9em;
+}
+input[name=q] {
+  box-sizing: border-box;
+  width: 100%;
+  font-size: 1.5rem;
+  padding: 0.75rem 0.5rem;;
+}
+
+.characters {
+  font-family: "Source Han Sans", "源ノ角ゴシック", "Hiragino Sans", "HiraKakuProN-W3", "Hiragino Kaku Gothic ProN W3", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "Noto Sans", "Noto Sans CJK JP", "メイリオ", Meiryo, "游ゴシック", YuGothic, "ＭＳ Ｐゴシック", "MS PGothic", "ＭＳ ゴシック", "MS Gothic", sans-serif;
+}
+
+.post {
+  display: flex;
+  flex-flow: row wrap;
+  align-content: flex-start;
+  background-color: #eee;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.post .word {
+  border: solid 1px transparent;
+  padding: 0.25rem 0;
+  display: flex;
+}
+.post .word:hover {
+  background-color: #5ba8e9;
+  border: solid 1px #2e90e3;
+  cursor: pointer;
+}
+.word-page h1 {
+  font-size: 4rem;
+  margin: 0;
+  padding: 0;
+}
+.word-page h1 a {
+  color: #2b142c;
+}
+@media (prefers-color-scheme: dark) {
+    .word-page h1 a {
+      color: white;
+    }
+}
+.word-page h1 span {
+  font-size: 4rem;
+}
+.word-page h1 span a {
+  text-decoration: none;
+}
+.word-page h1 rt {
+  font-size: 0.3em;
+  font-weight: 200;
+  user-select: none;
+}
+
+.word-info {
+  display: flex;
+}
+.word-info .column {
+  flex: 1;
+}
+.word-page section {
+border-top: solid 1px #ddd;
+margin-top: 1.5em;
+padding-top: 1.5em;
+}
+.word-page h3 {
+margin-top: 0;
+padding-top: 0;
+}
+.word-page .definitions {
+  font-size: 1.5em;
+}
+.word-page .definitions ol li {
+margin-bottom: 0.5em;
+}
+@media (prefers-color-scheme: dark) {
+  .word-page section {
+    border-top: solid 1px #777;
+  }
+}
+
+#results h4 {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    font-size: 1.2em;
+}
+
+.result-boxes {
+    margin: 0;
+    padding: 0;
+}
+.result-boxes li {
+    display: inline-block;
+    padding: 0.5em;
+    border: 1px rgba(255, 255, 255, 0.5) dashed;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+table tr {
+  border: solid 1px #eee;
+}
+table tr:nth-child(even) {
+  background-color: #f7f7f7;
+}
+table td {
+  padding: 1rem;
+}
+.selector {
+  display: flex;
+}
+.selector a,
+.selector span {
+  flex: 1;
+  text-decoration: none;
+  font-size: 0.8rem;
+  padding: 0.5rem;
+  background-color: #eee;
+}
+.selector a.selected {
+  background-color: salmon;
+  color: white;
+  font-weight: bold;
+}
+ul.word-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.25em 0 0;
+}
+ul.word-list > li {
+  margin: 0;
+  border-bottom: solid 1px #eee;
+}
+
+.word {
+  display: flex;
+  flex-direction: row;
+  padding: 1em 0;
+}
+.word .characters {
+  width: 30%;
+  font-size: 2em;
+  color: #111;
+  text-decoration: none;
+}
+.word .characters.uncommon {
+  font-size: 1.25em;
+  color: #555;
+}
+.word .characters rt {
+  font-size: 12px;
+  padding-bottom: 0.25em;
+  color: #777;
+  font-family: Arial; /* TODO standardize */
+}
+.word .characters.uncommon rt {
+  font-size: 11px;
+}
+.word .definitions {
+  width: 60%;
+}
+.word .percentile-outer {
+  width: 10%;
+  text-align: right;
+  font-size: 0.75em;
+  color: #888;
+}
+
+@media (prefers-color-scheme: dark) {
+    .word .characters {
+      color: #eee;
+    }
+    .word .characters.uncommon {
+      color: #ccc;
+    }
+    .word .characters rt {
+      color: #ccc;
+    }
+    .word .percentile-outer {
+      color: #ccc;
+    }
+}
+
+.word ruby rt {
+  user-select: none;
+}
+
+/* NEW WORD CSS */
+.word-page-chars {
+}
+.word-page-chars .char-pinyin {
+  text-align: center;
+}
+.word-page-chars .word-char-col {
+  display: inline-block;
+}
+.word-page-chars .word-char {
+  border-bottom: solid 1px #ddd;
+  font-size: 4em;
+  margin-bottom: 0.2em;
+  padding-bottom: 0.2em;
+}
+.word-page-chars .word-char a {
+  color: #333;
+  text-decoration: none;
+}
+.word-page-chars .word-char-alt {
+  font-size: 2em;
+  color: #aaa;
+  font-weight: lighter;
+  text-align: center;
+}
+@media (prefers-color-scheme: dark) {
+  .word-page-chars .word-char a {
+    color: white;
+  }
+  .word-page-chars .word-char-alt {
+    color: #aaa;
+  }
+}
+
+#segments {
+  padding: 16px;
+}
+.segment {
+  display: inline-block;
+  background-color: #eee;
+  padding: 8px;
+  border-radius: 4px;
+  margin: 0 0 8px 0;
+}
+.segment:hover {
+  cursor: pointer;
+  background-color: #ddd;
+}
+
+.inline-example {
+    color: #666;
+    padding: 0.25em 0;
+}
+.inline-example .example {
+    font-size: 0.7em;
+}
+.inline-example .english {
+    font-size: 0.6em;
+}
+@media (prefers-color-scheme: dark) {
+    .inline-example {
+        color: #ccc;
+    }
+}
+
+footer {
+  margin-top: 4em;
+  padding-top: 4em;
+  line-height: 1.25rem;
+  border-top: solid 1px #ddd;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.tags {
+  margin-top: 2em;
+}
+.tags a.tag {
+  display: inline-block;
+  background-color: var(--light-color);
+  padding: 8px;
+  margin-right: 4px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Review Interface */
+.review-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.review-stats {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-box {
+  text-align: center;
+  background: #f5f5f5;
+  padding: 10px 20px;
+  border-radius: 8px;
+  min-width: 80px;
+}
+
+.stat-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.card-container {
+  perspective: 1000px;
+  margin: 20px auto;
+  width: 100%;
+  max-width: 600px;
+  height: 400px;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 16px;
+}
+
+.card-front .characters {
+  font-size: 72px;
+  margin-bottom: 20px;
+}
+
+.card-back .characters {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.card-back .pinyin {
+  font-size: 24px;
+  margin-bottom: 24px;
+  color: #666;
+}
+
+.card-back .definitions {
+  font-size: 20px;
+  line-height: 1.5;
+  color: #333;
+}
+
+.flip-prompt {
+  position: absolute;
+  bottom: 20px;
+  font-size: 14px;
+  color: #999;
+}
+
+#review-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+#review-buttons button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.1s, opacity 0.1s;
+}
+
+#review-buttons button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+#review-buttons button:active {
+  transform: translateY(0);
+}
+
+#review-buttons .again {
+  background-color: #f44336;
+}
+
+#review-buttons .hard {
+  background-color: #ff9800;
+}
+
+#review-buttons .good {
+  background-color: #4caf50;
+}
+
+#review-buttons .easy {
+  background-color: #2196f3;
+}
+
+#no-reviews {
+  text-align: center;
+  color: #666;
+  margin-top: 40px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .stat-box {
+    background: #333;
+  }
+  
+  .card {
+    background: #333;
+  }
+  
+  .card-back .pinyin {
+    color: #999;
+  }
+  
+  .card-back .definitions {
+    color: #eee;
+  }
+  
+  #no-reviews {
+    color: #999;
+  }
+}

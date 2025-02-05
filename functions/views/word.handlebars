@@ -1,0 +1,160 @@
+<div class="word-page">
+  <div class="word-info">
+    <div class="column">
+
+      <div class="word-page-chars">
+
+        <div class="word-main">
+          {{#each chars}}
+            <span class="word-char-col">
+
+              <div class="char-pinyin">{{ this.pinyin }}</div>
+
+              <!-- TODO: change layout so word is highlightable -->
+              <div class="word-char">
+                <a href="/word/{{this.simplified}}">{{this.simplified}}</a>
+              </div>
+
+              <div class="word-char-alt">
+                <span>{{ this.traditional}}</span>
+              </div>
+            </span>
+          {{/each}}
+        </div>
+
+      </div>
+
+      <div class="study-tools">
+        <button id="add-to-deck-btn" class="add-to-deck" 
+          data-word="{{entry.simplified}}"
+          data-pinyin="{{entry.pinyinString}}"
+          data-definition="{{entry.definitionString}}">
+          Add to Deck
+        </button>
+        <span id="deck-status" class="deck-status"></span>
+      </div>
+
+      <div class="tags">
+        {{#each entry.tags}}
+          <a class="tag" href="/tag/{{this}}">{{this}}</a>
+        {{/each}}
+      </div>
+
+    </div>
+    <div class="column">
+      <div class="definitions">
+        <ol>
+          {{#each entry.definitions}}
+            <li>
+                {{this.definition}}
+                {{#if this.example}}
+                    <div class="inline-example">
+                        <div class="example">{{ this.example.example }}</div>
+                        <div class="english">{{ this.example.english }}</div>
+                    </div>
+                {{/if}}
+            </li>
+          {{/each}}
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  {{#if this.charEntries}}
+    <section>
+      <h3>Characters</h3>
+
+      <ul class="char-entries">
+        {{#each charEntries}}
+          <li>
+            {{ this.simplified }} ({{ this.traditional }}):
+            {{#each this.definitions}}
+              {{ this.definition ~}}
+              {{~#unless @last~}}; {{~/unless}}
+            {{/each}}
+          </li>
+        {{/each}}
+      </ul>
+    </section>
+  {{/if}}
+
+  <section>
+    <h3>Resources</h3>
+
+    <ul>
+      <li><a href="https://en.wiktionary.org/wiki/{{ entry.simplified }}">Wiktionary: {{ entry.simplified }}</a></li>
+      <li><a href="https://www.mdbg.net/chinese/dictionary?wdqb={{ entry.simplified }}">MDBG: {{ entry.simplified }}</a></li>
+      <li>Examples with {{ entry.simplified }} on <a href="https://tatoeba.org/en/sentences/search?from=cmn&query={{ entry.simplified }}&to=eng">Tatoeba</a></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Examples</h2>
+
+    {{#each entry.examples}}
+      <p>{{this.example}}</p>
+    {{else}}
+      <p>No examples. <a href="https://github.com/jeffcarp/chinesedict/issues/new">Add one?</a></p>
+    {{/each}}
+  </section>
+
+  <section>
+    <h2>Comments</h2>
+    <script src="https://giscus.app/client.js"
+            data-repo="jeffcarp/chinesedict"
+            data-repo-id="R_kgDOKQM5Dw"
+            data-category="General"
+            data-category-id="DIC_kwDOKQM5D84Ci3jt"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="bottom"
+            data-theme="preferred_color_scheme"
+            data-lang="en"
+            data-loading="lazy"
+            crossorigin="anonymous"
+            async>
+    </script>
+  </section>
+
+</div>
+
+<script type="module">
+console.log('Word page loaded');
+// Ensure SRS module is loaded and initialized for this page
+import { SRSManager } from '/js/srs.js';
+const srs = new SRSManager();
+
+// Initialize Add to Deck button
+const addToDeckBtn = document.getElementById('add-to-deck-btn');
+if (addToDeckBtn) {
+  const word = addToDeckBtn.dataset.word;
+  const pinyin = addToDeckBtn.dataset.pinyin.split(' ');
+  const definition = addToDeckBtn.dataset.definition;
+  const status = document.getElementById('deck-status');
+
+  console.log('Button data:', { word, pinyin, definition });
+
+  if (srs.isInDeck(word)) {
+    addToDeckBtn.textContent = 'Added to Deck';
+    addToDeckBtn.classList.add('added');
+    const stats = srs.getCardStats(word);
+    if (stats) {
+      status.textContent = stats.isDue ? 'Due for review' : `Next review in ${stats.dueIn} days`;
+    }
+  }
+
+  addToDeckBtn.addEventListener('click', () => {
+    console.log('Add to Deck button clicked');
+    if (!srs.isInDeck(word)) {
+      if (srs.addCard(word, pinyin, definition)) {
+        console.log('Card added successfully');
+        addToDeckBtn.textContent = 'Added to Deck';
+        addToDeckBtn.classList.add('added');
+        status.textContent = 'Added to review deck';
+      }
+    }
+  });
+}
+</script>
