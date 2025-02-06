@@ -115,7 +115,8 @@ function initializeDeckPage() {
 
     node.querySelector(".characters").appendChild(rubyEl);
     node.querySelector(".characters").href = `/word/${card.word}`;
-    node.querySelector(".definitions").textContent = card.definition;
+    node.querySelector(".definitions").textContent = 
+      card.definition.split('|').join('\n');  // Replace pipes with newlines
     node.querySelector(".next-review").textContent = 
       stats.isDue ? "Due now" : `Due in ${stats.dueIn} days`;
     node.querySelector(".review-count").textContent = 
@@ -173,7 +174,8 @@ function initializeReviewPage() {
     const back = cardContainer.querySelector(".card-back");
     const pinyinWithDiacritics = currentCard.pinyin.map(p => numericToMarkedPinyin(p));
     back.querySelector(".pinyin").textContent = pinyinWithDiacritics.join(" ");
-    back.querySelector(".definitions").textContent = currentCard.definition;
+    back.querySelector(".definitions").textContent = 
+      currentCard.definition.split('|').join('\n');  // Replace pipes with newlines
 
     // Show card and buttons
     cardContainer.style.display = "block";
@@ -323,16 +325,16 @@ function search() {
       commonClass = "uncommon";
     }
 
+    // NEW: Create a ruby element for the whole word with per-word pinyin
     const rubyEl = document.createElement("ruby");
-    result.simplified.split("").forEach((character, i) => {
-      const charEl = document.createElement("span");
-      charEl.innerText = character;
-      rubyEl.appendChild(charEl);
-
-      const rtEl = document.createElement("rt");
-      rtEl.innerText = result.pinyin[i];
-      rubyEl.appendChild(rtEl);
-    });
+    const baseSpan = document.createElement("span");
+    baseSpan.textContent = result.simplified;
+    const rtEl = document.createElement("rt");
+    rtEl.textContent = result.pinyin
+      .map(syllable => numericToMarkedPinyin(syllable))
+      .join(" ");
+    rubyEl.appendChild(baseSpan);
+    rubyEl.appendChild(rtEl);
 
     node.querySelector(".characters").appendChild(rubyEl);
     node.querySelector(".characters").classList.add(commonClass);
