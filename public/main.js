@@ -115,8 +115,7 @@ function initializeDeckPage() {
 
     node.querySelector(".characters").appendChild(rubyEl);
     node.querySelector(".characters").href = `/word/${card.word}`;
-    node.querySelector(".definitions").textContent = 
-      card.definition.split('|').join('\n');  // Replace pipes with newlines
+    node.querySelector(".definitions").textContent = card.definition.split('|').join('\n');
     node.querySelector(".next-review").textContent = 
       stats.isDue ? "Due now" : `Due in ${stats.dueIn} days`;
     node.querySelector(".review-count").textContent = 
