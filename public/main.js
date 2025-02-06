@@ -225,7 +225,7 @@ async function fetchDictionary() {
       definition = "";
     }
     const searchablePinyin = pinyin.join("").normalize("NFD").replace(
-      /[-]/g,
+      /[\u0300-\u036f]/g,
       "",
     ).toLowerCase();
     return {
